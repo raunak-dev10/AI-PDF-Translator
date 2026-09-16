@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Student Translation Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fa-solid fa-language"></i>
+                <span>Student Language Bridge</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="active" data-tab="home">Home</a></li>
+                <li><a href="#" data-tab="pdf-translate">Translate PDF</a></li>
+                <li><a href="#" data-tab="text-translate">Text Translate</a></li>
+                <li><a href="#" data-tab="about">About</a></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="home" class="tab-content active">
+            <div class="hero">
+                <h1>Break Language Barriers in Education</h1>
+                <p>Instantly translate textbooks, notes, and study materials into your native language.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="switchTab('pdf-translate')">Translate PDF</button>
+                    <button class="btn btn-secondary" onclick="switchTab('text-translate')">Translate Text</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Text Translate Section -->
+        <section id="text-translate" class="tab-content">
+            <div class="section-header">
+                <h2>Text Translation</h2>
+                <p>Paste your paragraphs here for instant translation.</p>
+            </div>
+
+            <div class="translator-container">
+                <div class="lang-controls">
+                    <div class="lang-select-group">
+                        <label>From:</label>
+                        <select id="source-lang-text">
+                            <option value="en" selected>English</option>
+                            <option value="hi">Hindi</option>
+                            <option value="mr">Marathi</option>
+                            <option value="kn">Kannada</option>
+                        </select>
+                    </div>
+                    <button class="btn-swap" id="swap-langs-text"><i
+                            class="fa-solid fa-arrow-right-arrow-left"></i></button>
+                    <div class="lang-select-group">
+                        <label>To:</label>
+                        <select id="target-lang-text">
+                            <option value="hi" selected>Hindi</option>
+                            <option value="en">English</option>
+                            <option value="mr">Marathi</option>
+                            <option value="kn">Kannada</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="text-areas">
+                    <div class="input-area">
+                        <textarea id="source-text" placeholder="Paste your text here..."></textarea>
+                        <div class="action-bar hide-mobile">
+                            <button id="mic-btn" class="btn-icon" title="Start/Stop Microphone"><i class="fa-solid fa-microphone"></i></button>
+                            <button id="clear-text" class="btn-icon" title="Clear Text"><i
+                                    class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="output-area">
+                        <div id="translation-loader" class="loader-overlay hidden">
+                            <div class="spinner"></div>
+                            <span>Translating...</span>
+                        </div>
+                        <textarea id="translated-text" readonly
+                            placeholder="Translation will appear here..."></textarea>
+                        <div class="action-bar">
+                            <button id="speak-btn" class="btn-icon" title="Listen to Translation"><i class="fa-solid fa-volume-high"></i></button>
+                            <button id="copy-text" class="btn-icon" title="Copy Translation"><i
+                                    class="fa-regular fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="translate-action">
+                    <button id="btn-translate-text" class="btn btn-primary btn-large">
+                        <i class="fa-solid fa-language"></i> Translate
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PDF Translate Section -->
+        <section id="pdf-translate" class="tab-content">
+            <div class="section-header">
+                <h2>PDF Document Translation</h2>
+                <p>Upload a PDF to view original and translated content side-by-side.</p>
+            </div>
+
+            <div class="pdf-upload-container" id="pdf-upload-zone">
+                <input type="file" id="pdf-file-input" accept="application/pdf" hidden>
+                <div class="upload-content">
+                    <i class="fa-regular fa-file-pdf upload-icon"></i>
+                    <h3>Drag & Drop your PDF here</h3>
+                    <p>or</p>
+                    <button class="btn btn-outline" onclick="document.getElementById('pdf-file-input').click()">Browse
+                        Files</button>
+                </div>
+            </div>
+
+            <div class="pdf-workspace hidden" id="pdf-workspace">
+                <div class="workspace-controls">
+                    <div class="file-info" id="pdf-file-name">document.pdf</div>
+                    <div class="lang-controls no-margin">
+                        <div class="lang-select-group">
+                            <label>To:</label>
+                            <select id="target-lang-pdf">
+                                <option value="hi" selected>Hindi</option>
+                                <option value="mr">Marathi</option>
+                                <option value="kn">Kannada</option>
+                                <option value="en">English</option>
+                            </select>
+                        </div>
+                        <button id="btn-translate-pdf" class="btn btn-primary btn-sm">Translate Context</button>
+                        <button id="btn-download-pdf" class="btn btn-success btn-sm disabled" disabled>
+                            <i class="fa-solid fa-download"></i> Download PDF
+                        </button>
+                        <button id="btn-close-pdf" class="btn btn-danger btn-sm">Close</button>
+                    </div>
+                </div>
+
+                <div id="pdf-loader" class="progress-container hidden">
+                    <p id="pdf-progress-text">Extracting exact layout... 0%</p>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="pdf-progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="split-view">
+                    <div class="split-pane original-pane">
+                        <div class="pane-header">Original Document</div>
+                        <div class="pane-content" id="pdf-original-content">
+                            <!-- Original text blocks will go here -->
+                        </div>
+                    </div>
+                    <div class="split-pane translated-pane">
+                        <div class="pane-header">Translated Document</div>
+                        <div class="pane-content" id="pdf-translated-content">
+                            <!-- Translated text blocks will go here -->
+                            <div class="placeholder-msg">Click 'Translate Context' to process document.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="tab-content">
+            <div class="section-header">
+                <h2>About EduTranslate AI</h2>
+            </div>
+            <div class="about-content">
+                <p>EduTranslate AI is a platform created specifically for students and educators to break the language
+                    barrier in learning.</p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fa-solid fa-bolt"></i>
+                        <h3>Fast Translation</h3>
+                        <p>Powered by reliable APIs for quick text processing.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                        <h3>Side-by-Side View</h3>
+                        <p>Compare original and translated text intuitively.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-regular fa-file-pdf"></i>
+                        <h3>PDF Support</h3>
+                        <p>Extract and translate full PDF documents seamlessly.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <!-- PDF.js via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- jsPDF for downloading PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
